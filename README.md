@@ -81,6 +81,24 @@ The rankSimilarity command will output a .csv file in the given folder provided 
 
 **percentage_B** This column provides the proportion of the similarities between the query file and the database bed file to the database bed file itself. It is the ratio of the total overlap between the query file and the database bed file over the total length of the database file. For example, if the percentage_A has an output of 1 while the percentage_B is lower, the query file may have been a subset of the database bed file.
 
+### Usage Instructions: sigEvl
+
+The user may also choose to run the following indivPVal() command in order to calculate the significance of a specific bed file similarity outputted by the GPSmatch_nt:
+
+> sigEvl(n, genome, bed1, bed1_jaccard_output, database_dir, output_path)
+
+**n** The number of background files generated in order to compute the p-value. As the n increases, the p-value will become more reliable, but the user should be aware that this will significantly increase the computing time. We have set a default n of 100.
+
+**genome** The file path of a genome file, which should be tab delimited and structured as follows: chromName, TAB, chromSize. A pre-formatted hg19 genome file can be found on the Github.
+
+**bed1** The file path of a query bed file to be compared to the hit file, which should be tab delimited and structured as follows: chromName, TAB, chromSize, TAB, chromEND
+
+**bed1_jaccard_output** The file path of the output file generated from the GPSmatch_nt() function
+
+**database_dir** The directory of a folder containing database files to be used for comparison with the query file.
+
+**output_path** The output path specifies where the exported .csv file (with the run results) will appear. Keep in mind that this file must already exist. Do not include a '/' at the end of the output file path.
+
 ### Usage Instructions: indivPVal
 
 The user may also choose to run the following indivPVal() command in order to calculate the significance of a specific bed file similarity outputted by the GPSmatch_nt:
@@ -97,7 +115,7 @@ The user may also choose to run the following indivPVal() command in order to ca
 
 **output_path** The output path specifies where the exported .csv file (with the run results) will appear. Keep in mind that this file must already exist. Do not include a '/' at the end of the output file path.
 
-### Interpreting Output: indivPVal
+### Interpreting Output: sigEvl & indivPVal
 
 The indivPVal command will output a .csv file in the given folder provided in the output_path parameter. The .csv file will contain an ordered table with the following rows:
 
