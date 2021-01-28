@@ -4,12 +4,12 @@
 #' @param genome The file path of a genome file, which should be tab delimited and structured as follows: <chromName><TAB><chromSize>. A pre-formatted hg19 genome file can be found on the Github.
 #' @param bed1 The file path of a query bed file to be compared to the database files.
 #' @param bed1_jaccard_output The file path of the output file generated from the GPSmatch_nt() function
-#' @param folder_dir The directory of a folder containing database files to be used for comparison with the query file.
+#' @param database_dir The directory of a folder containing database files to be used for comparison with the query file.
 #' @param output_path The file path where the output .csv file will be generated.
 #' @export
 #' @return A dataframe that shows the similarities of the query file to the database files ranked from greatest to least, tailored to user method specification.
 #' @examples
-#' rankBedSimilarity(100, "/dir/genome-file.txt", "/dir/bed1.txt","/dir/bed1_jaccard_output.txt","/dir/database_dir","/dir/output_path")
+#' sigEvl(100, "/dir/genome-file.txt", "/dir/bed1.txt","/dir/bed1_jaccard_output.txt","/dir/database_dir","/dir/output_path")
 
 sigEvl = function(n,genome,bed1,bed1_jaccard_output,database_dir, output_path){
   final_values = list()
