@@ -15,6 +15,24 @@ sigEvl = function(n,genome,bed1,bed1_jaccard_output,database_dir, output_path){
   final_values = list()
   indexes = list()
   file = read.csv(bed1_jaccard_output)
+
+
+  #generate background files from query:
+  background_dir = paste(database_dir,"background",sep="_")
+  if (dir.exists(background_dir)){
+    unlink(background_dir, recursive = TRUE)
+  }
+  dir.create(background_dir)
+  print("generating background files")
+  background_list = list()
+
+  for (j in 1:(n)){
+    background <- fread(cmd = paste("bedtools shuffle -i", bed1, "-g", genome))
+    write.table(background, paste(background_dir,"/background_file",j,".txt",sep = ""),sep="\t",row.names=F, col.names = F, quote = F)
+  }
+  print("finished generating background files")
+
+
   for (i in 1:10){
     #for each of the top hit files in folder_dir calculate original input file Jaccard index
     hitfile = paste(database_dir,file[i,2],sep = "/")
@@ -36,18 +54,6 @@ sigEvl = function(n,genome,bed1,bed1_jaccard_output,database_dir, output_path){
     #Summary
     indexes[[i]] = c(bedfile = as.character(file[i,2]),jaccard_index = jaccard_id,percentage_A = A_similarity,percentage_B=B_similarity)
 
-
-    #generate background files from query:
-    background_dir = paste(database_dir,"background",sep="_")
-    dir.create(background_dir)
-    print(paste("generating background files for", file[i,2]))
-    background_list = list()
-
-    for (j in 1:(n)){
-      background <- fread(cmd = paste("bedtools shuffle -i", bed1, "-g", genome))
-      write.table(background, paste(background_dir,"/background_file",j,".txt",sep = ""),sep="\t",row.names=F, col.names = F, quote = F)
-    }
-    print("finished generating background files")
 
     ######## Calculate background jaccard
     background_n = list.files(background_dir)
@@ -80,10 +86,11 @@ sigEvl = function(n,genome,bed1,bed1_jaccard_output,database_dir, output_path){
     }
     final_values[[i]] = c(bedfile = as.character(file[i,2]),jaccard_index = as.numeric(as.character(indexes[[i]][2])),pi_score = piscore, p_value = value, percentage_A = as.numeric(as.character(indexes[[i]][3])), percentage_B = as.numeric(as.character(indexes[[i]][4])),summary(bed))
 
-    unlink(background_dir, recursive = TRUE)
   }
+  unlink(background_dir, recursive = TRUE)
   values_df = as.data.frame(do.call(rbind,final_values))
   values_df = values_df[order(as.numeric(as.character(values_df$jaccard_index)),decreasing = T),]
   write.csv(values_df,paste(output_path,"/",gsub("^.*/", "", bed1),"_jaccard_pval.csv",sep=""))
+  print("finished output")
 }
 
