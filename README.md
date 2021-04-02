@@ -144,3 +144,5 @@ The provided bed1.txt is a subset of the Broad_ChIP_H3K27ac_NHEK_Broad file from
 Please note: the given parameters for bed1, genome and folder_dir must be strings, and must give the exact file path instead of reading the files in to R.
 
 All given files must be tab delimited, and cannot exceed the given columns (e.g. bed1 MUST only contain the three given columns)
+
+When using sigEvl(), if error messages are occuring while background files are generating, try to terminate the process and re-run the code.
