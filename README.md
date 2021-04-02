@@ -151,7 +151,8 @@ The following READme contains examples for running functions from the GPSmatch p
 
 Once the GPSmatch.Rproj file is opened, you can run all example files in that file. Run the following commands in GPSmatch.Rproj:
 
-> rankSimilarity("./Example/bed1.txt", "./Example/database_folder", "./Example")\
+> rankSimilarity("./Example/bed1.txt", "./Example/database_folder", "./Example")
+
 > sigEvl(5, "./Example/hg19_formatted_genomebedfile.txt", "./Example/bed1.txt", "./Example/bed1.txt_jaccard_nt.csv", "./Example/database_folder", "./Example")
 
 The outputs should appear in the GPSmatch-main folder, under the Example subfolder. The provided bed1.txt is a subset of the Broad_ChIP_H3K27ac_NHEK_Broad file from the database folder. Details on output can be found above.
