@@ -69,6 +69,10 @@ Once you have loaded the GPSmatch package using the library() command, you shoul
 
 > rankSimilarity("/dir/bed1.txt", "/dir/folder_dir", "/dir/output_folder")
 
+To run the files provided in the Example file, open GPSmatch.Rproj (see above) and use the following syntax:
+
+> rankSimilarity("./Example/bed1.txt", "./Example/database_folder", "./Example")
+
 **bed1** The file path of a query bed file to be compared to the database files, which should be tab delimited and structured as follows: chromName, TAB, chromSize, TAB, chromEND
 
 **folder_dir** The directory of a folder containing database files to be used for comparison with the query file.
