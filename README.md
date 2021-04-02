@@ -97,13 +97,17 @@ The user may also choose to run the following indivPVal() command in order to ca
 
 > sigEvl(n, genome, bed1, bed1_jaccard_output, database_dir, output_path)
 
+To run the files provided in the Example file, open GPSmatch.Rproj (see above). You must have run the example code for rankSimilarity() before using the example syntax for sigEvl():
+
+> sigEvl(5, "./Example/hg19_formatted_genomebedfile.txt", "./Example/bed1.txt", "./Example/bed1.txt_jaccard_nt.csv", "./Example/database_folder", "./Example")
+
 **n** The number of background files generated in order to compute the p-value. As the n increases, the p-value will become more reliable, but the user should be aware that this will significantly increase the computing time. We have set a default n of 100.
 
 **genome** The file path of a genome file, which should be tab delimited and structured as follows: chromName, TAB, chromSize. A pre-formatted hg19 genome file can be found on the Github.
 
 **bed1** The file path of a query bed file to be compared to the hit file, which should be tab delimited and structured as follows: chromName, TAB, chromSize, TAB, chromEND
 
-**bed1_jaccard_output** The file path of the output file generated from the GPSmatch_nt() function
+**bed1_jaccard_output** The file path of the output file generated from the rankSimilarity() function.
 
 **database_dir** The directory of a folder containing database files to be used for comparison with the query file.
 
@@ -143,11 +147,14 @@ The indivPVal command will output a .csv file in the given folder provided in th
 
 ## EXAMPLE
 
-Download all files present in the "Examples" folder in Github. Then, run the following command after filling their file paths:
+The following READme contains examples for running functions from the GPSmatch package, using provided database files found in the Example folder in Github. In order to run these example files, it is necessary to download the ZIP file from the Github. Once downloaded, open the GPSmatch.Rproj file found in the GPSmatch-main folder.
 
-> rankSimilarity("/dir/bed1.txt, "/dir/database_folder", "/dir/output_path")
+Once the GPSmatch.Rproj file is opened, you can run all example files in that file. Run the following commands in GPSmatch.Rproj:
 
-The provided bed1.txt is a subset of the Broad_ChIP_H3K27ac_NHEK_Broad file from the database folder. If run correctly, the outputs should look like the following (with some minor differences due to the random generation of the background files and the number of n run):
+> rankSimilarity("./Example/bed1.txt", "./Example/database_folder", "./Example")\
+> sigEvl(5, "./Example/hg19_formatted_genomebedfile.txt", "./Example/bed1.txt", "./Example/bed1.txt_jaccard_nt.csv", "./Example/database_folder", "./Example")
+
+The outputs should appear in the GPSmatch-main folder, under the Example subfolder. The provided bed1.txt is a subset of the Broad_ChIP_H3K27ac_NHEK_Broad file from the database folder. Details on output can be found above.
 
 ## TROUBLESHOOTING:
 
