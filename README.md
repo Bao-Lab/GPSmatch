@@ -55,7 +55,7 @@ You should now be set to use the GPSmatch package!
 
 ### GPSmatch Example usage
 
-The following READme contains examples for running functions from the GPSmatch package, using provided database files found in the Example folder in Github. In order to run these example files, it is necessary to download the ZIP file from the Github. Once downloaded, open the GPSmatch.Rproj file found in the GPSmatch-main folder.
+The following READme contains examples for running functions from the GPSmatch package, using provided database files found in the Example folder in Github. In order to run these example files, it is necessary to download the ZIP file from the Github. Once downloaded, open the GPSmatch.Rproj file found in the GPSmatch-main folder. Simply running install_github() will not allow the user to run the Example syntaxes, as Example files must be accessible to the program via the local computer.
 
 Once the GPSmatch.Rproj file is opened, you can run all example files in that file.
 
