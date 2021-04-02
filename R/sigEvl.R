@@ -32,8 +32,14 @@ sigEvl = function(n,genome,bed1,bed1_jaccard_output,database_dir, output_path){
   }
   print("finished generating background files")
 
+  if (length(file)<10){
+    top10 = length(file)
+  }
+  else{
+    top10 = 10
+  }
 
-  for (i in 1:10){
+  for (i in 1:top10){
     #for each of the top hit files in folder_dir calculate original input file Jaccard index
     hitfile = paste(database_dir,file[i,2],sep = "/")
 
@@ -90,6 +96,7 @@ sigEvl = function(n,genome,bed1,bed1_jaccard_output,database_dir, output_path){
   unlink(background_dir, recursive = TRUE)
   values_df = as.data.frame(do.call(rbind,final_values))
   values_df = values_df[order(as.numeric(as.character(values_df$jaccard_index)),decreasing = T),]
+
   write.csv(values_df,paste(output_path,"/",gsub("^.*/", "", bed1),"_jaccard_pval.csv",sep=""))
   print("finished output")
 }
