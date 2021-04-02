@@ -69,7 +69,7 @@ Once you have loaded the GPSmatch package using the library() command, you shoul
 
 > rankSimilarity("/dir/bed1.txt", "/dir/folder_dir", "/dir/output_folder")
 
-To run the files provided in the Example file, open GPSmatch.Rproj (see above) and use the following syntax:
+To run the files provided in the Example file, open GPSmatch.Rproj (see the above GPSmatch Example usage section) and use the following syntax:
 
 > rankSimilarity("./Example/bed1.txt", "./Example/database_folder", "./Example")
 
@@ -97,7 +97,7 @@ The user may also choose to run the following indivPVal() command in order to ca
 
 > sigEvl(n, genome, bed1, bed1_jaccard_output, database_dir, output_path)
 
-To run the files provided in the Example file, open GPSmatch.Rproj (see above). You must have run the example code for rankSimilarity() before using the example syntax for sigEvl():
+To run the files provided in the Example file, open GPSmatch.Rproj (see the above GPSmatch Example usage section). You must have run the example code for rankSimilarity() before using the example syntax for sigEvl():
 
 > sigEvl(5, "./Example/hg19_formatted_genomebedfile.txt", "./Example/bed1.txt", "./Example/bed1.txt_jaccard_nt.csv", "./Example/database_folder", "./Example")
 
