@@ -53,6 +53,12 @@ Once data.table and tidyverse are installed and loaded, you can install and load
 
 You should now be set to use the GPSmatch package!
 
+### GPSmatch Example usage
+
+The following READme contains examples for running functions from the GPSmatch package, using provided database files found in the Example folder in Github. In order to run these example files, it is necessary to download the ZIP file from the Github. Once downloaded, open the GPSmatch.Rproj file found in the GPSmatch-main folder.
+
+Once the GPSmatch.Rproj file is opened, you can run all example files in that file.
+
 ## USAGE AND PARAMETERS:
 
 The GPSmatch package contains three functions available for the user: rankSimilarity, sigEvl and indivPVal. The following documentation explains how to use them.
