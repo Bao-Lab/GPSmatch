@@ -8,80 +8,89 @@
 #' @export
 #' @return A .csv file showing the p-value, pi-score, and a five number summary of the background file distribution compared to the original jaccard index.
 #' @examples
-#' indivPVal(100,"/dir/bed1.txt","/dir/genome.txt","/dir/folder_dir","/dir/output_folder")
+#' indivPVal(n=2000,bed1="/dir/bed1.txt",genome ="/dir/genome.txt",bed2 ="/dir/bed2.txt", output_path = "/dir/output_folder")
 
-indivPVal = function(n=100, bed1, genome, bed2,output_path){
-  #3levels = list.files(folder_dir)
-  final_values = list()
+indivPVal = function(n=2000, bed1= bed1, genome =genome, bed2 = bed2, output_path = output_path){
+  if(is_missing(n)) {
+    n = 2000
+  }
+  if(is_missing(bed1)) {
+    stop("The bed1 information is missing. Please use indivPVal(n=2000,bed1='/dir/bed1.txt', genome ='/dir/genome.txt',bed2 ='/dir/bed2.txt', output_path = '/dir/output_folder')")
+  }
+  if(is_missing(genome)) {
+    stop("The genome information is missing. If you are working with human You can use the human genome BED file within this package './Example/hg19_formatted_genomebedfile.txt'")
+  }
+  if(is_missing(bed2)) {
+    stop("The bed2 file is missing. Please use the following format indivPVal(n=2000,bed1='/dir/bed1.txt', genome ='/dir/genome.txt',bed2 ='/dir/bed2.txt', output_path = '/dir/output_folder')")
+  }
+  if(is_missing(output_path)) {
+    stop("The output_path is missing. Please use the following format indivPVal(n=2000,bed1='/dir/bed1.txt', genome ='/dir/genome.txt',bed2 ='/dir/bed2.txt', output_path = '/dir/output_folder')")
+  }
+
+
+  #final_values = list()
+  #calculate size of the total binding region in query bed file
+  query_length = overlapCalc(bed1,bed1)
+
 
   #generate background files from query:
+  #step1: create background file directory
   background_dir = paste(bed1,"background",sep="_")
+  if (dir.exists(background_dir)){
+    unlink(background_dir, recursive = TRUE)
+  }
   dir.create(background_dir)
   print("generating background files")
-  background_list = list()
-  for (i in 1:(n)){
+
+  #step2: write n randomly generated files.
+  for (j in 1:(n)){
     background <- fread(cmd = paste("bedtools shuffle -i", bed1, "-g", genome))
-    write.table(background, paste(background_dir,"/background_file",i,".txt",sep = ""),sep="\t",row.names=F, col.names = F, quote = F)
+    write.table(background, paste(background_dir,"/background_file",j,".txt",sep = ""),sep="\t",row.names=F, col.names = F, quote = F)
   }
   print("finished generating background files")
 
+  ##calculate the jaccard index for original file bed1 and bed2
+  num_overlap = overlapCalc(bed1, bed2)
+  num1=query_length
+  hit_length = overlapCalc(bed2, bed2)
+  num2=hit_length
 
-  ##generates real jaccard for bed1 and bed2
-  jaccard_list = jaccardCalc(bed1, bed2)
-  num_overlap = jaccard_list[1]
-  num1=jaccard_list[2]
-  num2=jaccard_list[3]
-
+  #jaccard index
   num_total = num1 + num2 - num_overlap
-  real_jaccard_id = num_overlap/num_total
+  jaccard_id = num_overlap/num_total
 
-  ######## shuffled files and bed2
+  #percentage --- ANB/A and ANB/B
+  #ANB/A
+  A_similarity = (num_overlap)/num1
+  B_similarity = (num_overlap)/num2
+  #Summary
+  indexes = c(queryfile = bed1,hitfile = bed2, jaccard_index = jaccard_id,percentage_A = A_similarity,percentage_B=B_similarity)
+
+
+  ######## Calculate background jaccard
   background_n = list.files(background_dir)
   background_jaccard = list()
-  for (j in 1:length(background_n)){
-      #################################################watch
-      bed1shuffle= paste(background_dir,background_n[j],sep="/")
 
-      jaccard_list = jaccardCalc(bed1shuffle, bed2)
-      num_overlap = jaccard_list[1]
-      num1=jaccard_list[2]
-      num2=jaccard_list[3]
+  background_jaccard = lapply(background_n, FUN = Background_jaccardfun, hitfile=bed2, background_dir=background_dir,  query_length=query_length,  hit_length=hit_length)
 
-      num_total = num1 + num2 - num_overlap
-      shuffle_jaccard_id = num_overlap/num_total
+  jaccard_df = as.data.frame(do.call(rbind,background_jaccard))
+  bed = as.numeric(as.character(jaccard_df[,3]))   ## jaccard scores of shuffled background
 
-      #jaccard_id = jaccard(paste(background_dir,background_n[j],sep="/"),pwd)
-      background_jaccard[[j]] = c(bed1shuffle,jaccard_index = shuffle_jaccard_id)
+  #find the p-value
+  num = as.numeric(as.character(match(as.numeric(as.character(indexes[3])),sort(c(bed,as.numeric(as.character(indexes[3]))),decreasing=T))))
+  value = num/(n+1)
 
-      # print(j)
-    }
+  #finding the pi-score = mean ratio * (-log10(p-value))
+  if (mean(bed) == 0){
+    piscore = (as.numeric(as.character(indexes[3])))/(0.000001) * (-log(value))
+  } else{
+    piscore = (as.numeric(as.character(indexes[3])))/(mean(bed)) * (-log(value))
+  }
+  final_values = c(query = bed1, hit = bed2,jaccard_index = as.numeric(as.character(indexes[3])),pi_score = piscore, p_value = value, percentage_A = as.numeric(as.character(indexes[4])), percentage_B = as.numeric(as.character(indexes[5])),summary(bed))
 
-    jaccard_df = as.data.frame(do.call(rbind,background_jaccard))
-
-    bed = as.numeric(as.character(jaccard_df[,2]))
-
-    #find the p-value
-    num = as.numeric(as.character(match(real_jaccard_id,sort(c(bed,real_jaccard_id),decreasing=T))))
-    value = num/(n+1)
-
-    #finding the pi-score = mean ratio * (-log10(p-value))
-    if (mean(bed) == 0){
-      piscore = (real_jaccard_id)/(0.000001) * (-log(value))
-    }
-    else{
-      piscore = (real_jaccard_id)/(mean(bed)) * (-log(value))
-    }
-
-
-
-    #final_values[[i]] = c(bed1,jaccard_index = real_jaccard_id,pi_score = piscore, p_value = value,summary(bed))
-    final_values = c(bed1,bed2,jaccard_index = real_jaccard_id,pi_score = piscore, p_value = value,summary(bed))
-    names(final_values) <- c("query", "hit", "Jaccard index","pi_score", "p-value", "Shuffle_Min jaccard", "Shuffle_1st Quarter jaccard", "Shuffle_Median jaccard", "Shuffle_Mean jaccard", "Shuffle_3rd Quarter jaccard","Shuffle_Max jaccard")
-  unlink(background_dir, recursive = TRUE)
-
-
-  write.csv(final_values,paste(output_path,"/",gsub("^.*/", "", bed1), "_",gsub("^.*/", "", bed2),"_pvalue_nt.csv",sep=""))
-  print(paste(output_path,"/",gsub("^.*/", "", bed1), "_",gsub("^.*/", "", bed2),"_pvalue.csv",sep=""))
-  print("file created!")
+unlink(background_dir, recursive = TRUE)
+write.csv(final_values,paste(output_path,"/",gsub("^.*/", "", bed1),"_pair_jaccard_pval.csv",sep=""))
+print("finished output")
 }
+
 

@@ -2,29 +2,39 @@
 % Please edit documentation in R/sigEvl.R
 \name{sigEvl}
 \alias{sigEvl}
-\title{Computes the p-value and pi-scores for top ten hits from GPSmatch_nt()}
+\title{Computes the p-value and pi-scores for top hits from rankSimilarity()}
 \usage{
-sigEvl(n, genome, bed1, bed1_jaccard_output, database_dir, output_path)
+sigEvl(
+  n = n,
+  tophit = tophit,
+  genome = genome,
+  queryBed = queryBed,
+  queryBed_jaccard_output = queryBed_jaccard_output,
+  database_dir = database_dir,
+  output_path = output_path
+)
 }
 \arguments{
 \item{n}{The number of background files generated in order to compute the p-value. As the n increases, the p-value will become more reliable, but the user should be aware that this will significantly increase the computing time. We have set a default n of 100.}
 
+\item{tophit}{The number of top hits that the user are interested to compute p-value and pi-scores. Those top hits were generated and ordered by function rankSimilarity() at step 2 and were written to file queryBed_jaccard_output.}
+
 \item{genome}{The file path of a genome file, which should be tab delimited and structured as follows: <chromName><TAB><chromSize>. A pre-formatted hg19 genome file can be found on the Github.}
 
-\item{bed1}{The file path of a query bed file to be compared to the database files.}
+\item{queryBed}{The file path of a query bed file to be compared to the database files.}
 
-\item{bed1_jaccard_output}{The file path of the output file generated from the GPSmatch_nt() function}
+\item{queryBed_jaccard_output}{The file path of the output file generated from the rankSimilarity() function}
+
+\item{database_dir}{The directory of a folder containing database files to be used for comparison with the query file.}
 
 \item{output_path}{The file path where the output .csv file will be generated.}
-
-\item{folder_dir}{The directory of a folder containing database files to be used for comparison with the query file.}
 }
 \value{
 A dataframe that shows the similarities of the query file to the database files ranked from greatest to least, tailored to user method specification.
 }
 \description{
-The function evaluates the significance of the jaccard scores by calculating p-values and pi-scores.
+The function evaluates the significance of the jaccard index scores by calculating p-values and pi-scores.
 }
 \examples{
-rankBedSimilarity(100, "/dir/genome-file.txt", "/dir/bed1.txt","/dir/bed1_jaccard_output.txt","/dir/database_dir","/dir/output_path")
+sigEvl(n=2000, tophit=5,genome="/dir/genome-file.txt", queryBed="/dir/bed1.txt",queryBed_jaccard_output="/dir/bed1_jaccard_output.txt",database_dir="/dir/database_dir",output_path="/dir/output_path")
 }
