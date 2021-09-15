@@ -1,6 +1,6 @@
 #' @title Calculate significance of bed file similarity
 #' @description The function compare two bed files (query and hit) to check if the observed degree of similarity between the query and the hit files may occur purely by chance.
-#' @param n The number of background files generated in order to compute the p-value. As the n increases, the p-value will become more reliable, but the user should be aware that this will significantly increase the computing time. We have set a default n of 100.
+#' @param n The number of background files generated in order to compute the p-value. As the n increases, the p-value will become more reliable, but the user should be aware that this will significantly increase the computing time. We have set a default n of 2000.
 #' @param bed1 The file path of a query bed file to be compared to the database files.
 #' @param genome The file path of a genome file, which should be tab delimited and structured as follows: <chromName><TAB><chromSize>. A pre-formatted hg19 genome file can be found on the Github.
 #' @param bed2 The file path of a bedfile in the database, or any bed file.
@@ -8,7 +8,7 @@
 #' @export
 #' @return A .csv file showing the p-value, pi-score, and a five number summary of the background file distribution compared to the original jaccard index.
 #' @examples
-#' indivPVal(n=2000,bed1="/dir/bed1.txt",genome ="/dir/genome.txt",bed2 ="/dir/bed2.txt", output_path = "/dir/output_folder")
+#' indivPVal(n=n,bed1="/dir/bed1.txt",genome ="/dir/genome.txt",bed2 ="/dir/bed2.txt", output_path = "/dir/output_folder")
 
 indivPVal = function(n=2000, bed1= bed1, genome =genome, bed2 = bed2, output_path = output_path){
   if(is_missing(n)) {

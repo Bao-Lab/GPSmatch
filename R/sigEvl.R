@@ -1,6 +1,6 @@
 #' @title Computes the p-value and pi-scores for top hits from rankSimilarity()
 #' @description The function evaluates the significance of the jaccard index scores by calculating p-values and pi-scores.
-#' @param n The number of background files generated in order to compute the p-value. As the n increases, the p-value will become more reliable, but the user should be aware that this will significantly increase the computing time. We have set a default n of 100.
+#' @param n The number of background files generated in order to compute the p-value. As the n increases, the p-value will become more reliable, but the user should be aware that this will significantly increase the computing time. We have set a default n of 2000.
 #' @param tophit The number of top hits that the user are interested to compute p-value and pi-scores. Those top hits were generated and ordered by function rankSimilarity() at step 2 and were written to file queryBed_jaccard_output.
 #' @param genome The file path of a genome file, which should be tab delimited and structured as follows: <chromName><TAB><chromSize>. A pre-formatted hg19 genome file can be found on the Github.
 #' @param queryBed The file path of a query bed file to be compared to the database files.

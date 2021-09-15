@@ -15,7 +15,7 @@ sigEvl(
 )
 }
 \arguments{
-\item{n}{The number of background files generated in order to compute the p-value. As the n increases, the p-value will become more reliable, but the user should be aware that this will significantly increase the computing time. We have set a default n of 100.}
+\item{n}{The number of background files generated in order to compute the p-value. As the n increases, the p-value will become more reliable, but the user should be aware that this will significantly increase the computing time. We have set a default n of 2000.}
 
 \item{tophit}{The number of top hits that the user are interested to compute p-value and pi-scores. Those top hits were generated and ordered by function rankSimilarity() at step 2 and were written to file queryBed_jaccard_output.}
 
